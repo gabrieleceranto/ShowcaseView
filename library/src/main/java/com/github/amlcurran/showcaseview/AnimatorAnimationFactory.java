@@ -19,7 +19,9 @@ package com.github.amlcurran.showcaseview;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.graphics.Point;
+import android.os.Build;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
@@ -35,6 +37,7 @@ class AnimatorAnimationFactory implements AnimationFactory {
         interpolator = new AccelerateDecelerateInterpolator();
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void fadeInView(View target, long duration, final AnimationStartListener listener) {
         ObjectAnimator oa = ObjectAnimator.ofFloat(target, ALPHA, INVISIBLE, VISIBLE);
@@ -59,6 +62,7 @@ class AnimatorAnimationFactory implements AnimationFactory {
         oa.start();
     }
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void fadeOutView(View target, long duration, final AnimationEndListener listener) {
         ObjectAnimator oa = ObjectAnimator.ofFloat(target, ALPHA, INVISIBLE);
@@ -83,6 +87,7 @@ class AnimatorAnimationFactory implements AnimationFactory {
         oa.start();
     }
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void animateTargetToPoint(ShowcaseView showcaseView, Point point) {
         AnimatorSet set = new AnimatorSet();
