@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 
 class StandardShowcaseDrawer implements ShowcaseDrawer {
 
@@ -31,6 +32,7 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
     private final Paint basicPaint;
     private final float showcaseRadius;
     protected int backgroundColour;
+	protected final float scaleMultiplier;
 
     public StandardShowcaseDrawer(Resources resources) {
         PorterDuffXfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
@@ -42,6 +44,9 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
         basicPaint = new Paint();
         showcaseRadius = resources.getDimension(R.dimen.showcase_radius);
         showcaseDrawable = resources.getDrawable(R.drawable.cling_bleached);
+		final TypedValue outValue = new TypedValue();
+		resources.getValue(R.dimen.showcase_scale_multiplier, outValue, true);
+		scaleMultiplier = outValue.getFloat();
     }
 
     @Override
@@ -52,25 +57,27 @@ class StandardShowcaseDrawer implements ShowcaseDrawer {
     @Override
     public void drawShowcase(Bitmap buffer, float x, float y, float scaleMultiplier) {
         Canvas bufferCanvas = new Canvas(buffer);
-        bufferCanvas.drawCircle(x, y, showcaseRadius, eraserPaint);
-        int halfW = getShowcaseWidth() / 2;
-        int halfH = getShowcaseHeight() / 2;
+        bufferCanvas.drawCircle(x, y, showcaseRadius * this.scaleMultiplier, eraserPaint);
+		final int showcaseHeight = getShowcaseHeight();
+		final int showcaseWidth = getShowcaseWidth();
+		int halfW = showcaseWidth / 2;
+		int halfH = showcaseHeight / 2;
         int left = (int) (x - halfW);
         int top = (int) (y - halfH);
         showcaseDrawable.setBounds(left, top,
-                left + getShowcaseWidth(),
-                top + getShowcaseHeight());
+                left + showcaseWidth,
+                top + showcaseHeight);
         showcaseDrawable.draw(bufferCanvas);
     }
 
     @Override
     public int getShowcaseWidth() {
-        return showcaseDrawable.getIntrinsicWidth();
+        return (int) (showcaseDrawable.getIntrinsicWidth() * scaleMultiplier);
     }
 
     @Override
     public int getShowcaseHeight() {
-        return showcaseDrawable.getIntrinsicHeight();
+        return (int) (showcaseDrawable.getIntrinsicHeight() * scaleMultiplier);
     }
 
     @Override

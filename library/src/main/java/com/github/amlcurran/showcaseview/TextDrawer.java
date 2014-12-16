@@ -133,8 +133,8 @@ class TextDrawer {
     	areas[1] = showcase.top * canvasW;
     	areas[2] = (canvasW - showcase.right) * canvasH;
     	areas[3] = (canvasH - showcase.bottom) * canvasW;
-    	
-    	int largest = 0;
+
+		int largest = 0;
     	for(int i = 1; i < areas.length; i++) {
     		if(areas[i] > areas[largest])
     			largest = i;
