@@ -69,7 +69,7 @@ class TextDrawer {
                 canvas.save();
                 if (hasRecalculated) {
                     mDynamicTitleLayout = new DynamicLayout(mTitle, titlePaint,
-                            (int) textPosition[2], Layout.Alignment.ALIGN_NORMAL,
+                            (int) Math.max(textPosition[2], 0), Layout.Alignment.ALIGN_NORMAL,
                             1.0f, 1.0f, true);
                 }
                 if (mDynamicTitleLayout != null) {
