@@ -38,6 +38,7 @@ class TextDrawer {
     private final ShowcaseAreaCalculator calculator;
     private final float padding;
     private final float actionBarOffset;
+    private final float minTextWidth;
 
     private CharSequence mTitle, mDetails;
     private float[] mBestTextPosition = new float[3];
@@ -50,6 +51,7 @@ class TextDrawer {
     public TextDrawer(Resources resources, ShowcaseAreaCalculator calculator, Context context) {
         padding = resources.getDimension(R.dimen.text_padding);
         actionBarOffset = resources.getDimension(R.dimen.action_bar_offset);
+		minTextWidth = resources.getDimension(R.dimen.showcase_min_text_width);
 
         this.calculator = calculator;
         this.context = context;
@@ -69,7 +71,7 @@ class TextDrawer {
                 canvas.save();
                 if (hasRecalculated) {
                     mDynamicTitleLayout = new DynamicLayout(mTitle, titlePaint,
-                            (int) Math.max(textPosition[2], 0), Layout.Alignment.ALIGN_NORMAL,
+							defaultIfNegative(textPosition[2]), Layout.Alignment.ALIGN_NORMAL,
                             1.0f, 1.0f, true);
                 }
                 if (mDynamicTitleLayout != null) {
@@ -83,7 +85,7 @@ class TextDrawer {
                 canvas.save();
                 if (hasRecalculated) {
                     mDynamicDetailLayout = new DynamicLayout(mDetails, textPaint,
-                            (int) textPosition[2],
+							defaultIfNegative(textPosition[2]),
                             Layout.Alignment.ALIGN_NORMAL,
                             1.2f, 1.0f, true);
                 }
@@ -100,7 +102,11 @@ class TextDrawer {
         hasRecalculated = false;
     }
 
-    public void setContentText(CharSequence details) {
+	private int defaultIfNegative(float width) {
+		return (int) (width < 0 ? minTextWidth : width);
+	}
+
+	public void setContentText(CharSequence details) {
         if (details != null) {
             SpannableString ssbDetail = new SpannableString(details);
             ssbDetail.setSpan(mDetailSpan, 0, ssbDetail.length(), 0);
